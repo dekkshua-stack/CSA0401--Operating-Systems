@@ -62,7 +62,7 @@ Enter Burst Time for Process 3: 7
 Enter Burst Time for Process 4: 3
 
 
-OUT[UT:
+OUTPUT:
 
 Process  Burst Time  Waiting Time  Turnaround Time
 P4       3           0             3
