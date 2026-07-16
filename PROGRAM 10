@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <string.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+struct message
+{
+    long msg_type;
+    char msg_text[100];
+};
+int main()
+{
+    struct message msg;
+    int msgid;
+    msgid = msgget(1234, 0666 | IPC_CREAT);
+    printf("Enter a message: ");
+    fgets(msg.msg_text, sizeof(msg.msg_text), stdin);
+    msg.msg_type = 1;
+    msgsnd(msgid, &msg, sizeof(msg.msg_text), 0);
+    msgrcv(msgid, &msg, sizeof(msg.msg_text), 1, 0);
+    printf("Received Message: %s", msg.msg_text);
+    msgctl(msgid, IPC_RMID, NULL);
+    return 0;
+}
+
+
+
+
+
+OUTPUT:
+
+Enter a message: Hello OS 
+Received Message: Hello OS 
