@@ -1,0 +1,114 @@
+#include <stdio.h>
+int main()
+{
+    int b[10], p[10], temp[10];
+    int nb, np, i, j, choice;
+    printf("Enter number of memory blocks: ");
+    scanf("%d", &nb);
+    printf("Enter block sizes:\n");
+    for(i = 0; i < nb; i++)
+        scanf("%d", &b[i]);
+    printf("Enter number of processes: ");
+    scanf("%d", &np);
+    printf("Enter process sizes:\n");
+    for(i = 0; i < np; i++)
+        scanf("%d", &p[i]);
+    printf("\n1. First Fit\n2. Best Fit\n3. Worst Fit\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+    for(i = 0; i < nb; i++)
+        temp[i] = b[i];
+    printf("\nProcess\tSize\tBlock\n");
+    switch(choice)
+    {
+        case 1: 
+            for(i = 0; i < np; i++)
+            {
+                for(j = 0; j < nb; j++)
+                {
+                    if(temp[j] >= p[i])
+                    {
+                        printf("P%d\t%d\t%d\n", i+1, p[i], j+1);
+                        temp[j] -= p[i];
+                        break;
+                    }
+                }
+                if(j == nb)
+                    printf("P%d\t%d\tNot Allocated\n", i+1, p[i]);
+            }
+            break;
+        case 2: 
+            for(i = 0; i < np; i++)
+            {
+                int best = -1;
+                for(j = 0; j < nb; j++)
+                {
+                    if(temp[j] >= p[i])
+                    {
+                        if(best == -1 || temp[j] < temp[best])
+                            best = j;
+                    }
+                }
+                if(best != -1)
+                {
+                    printf("P%d\t%d\t%d\n", i+1, p[i], best+1);
+                    temp[best] -= p[i];
+                }
+                else
+                    printf("P%d\t%d\tNot Allocated\n", i+1, p[i]);
+            }
+            break;
+        case 3: 
+            for(i = 0; i < np; i++)
+            {
+                int worst = -1;
+                for(j = 0; j < nb; j++)
+                {
+                    if(temp[j] >= p[i])
+                    {
+                        if(worst == -1 || temp[j] > temp[worst])
+                            worst = j;
+                    }
+                }
+                if(worst != -1)
+                {
+                    printf("P%d\t%d\t%d\n", i+1, p[i], worst+1);
+                    temp[worst] -= p[i];
+                }
+                else
+                    printf("P%d\t%d\tNot Allocated\n", i+1, p[i]);
+            }
+            break;
+        default:
+            printf("Invalid Choice");
+    }
+    return 0;
+}
+
+
+
+INPUT :
+
+
+Enter number of memory blocks: 5
+Enter block sizes:
+100 300 600 500 400
+Enter number of processes: 4
+Enter process sizes:
+212 417 112 426
+
+1. First Fit
+2. Best Fit
+3. Worst Fit
+Enter your choice: 1
+
+
+
+OUTPUT :
+
+
+Process	Size	Block
+P1	    212	    2
+P2	    417	    3
+P3	    112	    3
+P4	    426	    4
