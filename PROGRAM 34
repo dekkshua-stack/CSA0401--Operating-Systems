@@ -1,0 +1,66 @@
+#include <stdio.h>
+int main()
+{
+    int n, i, rec;
+    char records[20][50];
+    printf("Enter the number of records: ");
+    scanf("%d", &n);
+    getchar();  
+    printf("Enter the records:\n");
+    for(i = 0; i < n; i++)
+    {
+        printf("Record %d: ", i + 1);
+        fgets(records[i], sizeof(records[i]), stdin);
+    }
+    printf("\nRecords stored sequentially:\n");
+    for(i = 0; i < n; i++)
+    {
+        printf("Record %d: %s", i + 1, records[i]);
+    }
+    printf("\nEnter the record number to access: ");
+    scanf("%d", &rec);
+    if(rec < 1 || rec > n)
+    {
+        printf("Invalid record number.\n");
+    }
+    else
+    {
+        printf("\nAccessing records sequentially...\n");
+        for(i = 0; i < rec; i++)
+        {
+            printf("Reading Record %d: %s", i + 1, records[i]);
+        }
+        printf("\nRequested Record %d accessed successfully.\n", rec);
+    }
+    return 0;
+}
+
+
+
+INPUT :
+
+Enter the number of records: 4
+Enter the records:
+Record 1: Alice 
+Record 2: Bob
+Record 3: Elza
+Record 4: Siva
+
+Enter the record number to access: 4
+
+
+OUTPUT :
+
+Records stored sequentially:
+Record 1: Alice 
+Record 2: Bob
+Record 3: Elza
+Record 4: Siva
+
+Accessing records sequentially...
+Reading Record 1: Alice 
+Reading Record 2: Bob
+Reading Record 3: Elza
+Reading Record 4: Siva
+
+Requested Record 4 accessed successfully.
