@@ -1,0 +1,80 @@
+#include <stdio.h>
+int main()
+{
+    int block[50], next[50];
+    int n, i;
+    int first, last, current;
+    printf("Enter the number of blocks in the file: ");
+    scanf("%d", &n);
+    if (n <= 0 || n > 50)
+    {
+        printf("Invalid number of blocks.\n");
+        return 1;
+    }
+    printf("Enter the disk block numbers:\n");
+    for (i = 0; i < n; i++)
+    {
+        printf("Block %d: ", i + 1);
+        scanf("%d", &block[i]);
+    }
+    for (i = 0; i < n - 1; i++)
+    {
+        next[i] = i + 1;
+    }
+    next[n - 1] = -1;
+    first = 0;
+    last = n - 1;
+    printf("\n--- Linked File Allocation ---\n");
+    printf("First Block : %d\n", block[first]);
+    printf("Last Block  : %d\n", block[last]);
+    printf("\nBlock\tNext Block\n");
+    for (i = 0; i < n; i++)
+    {
+        printf("%d\t", block[i]);
+        if (next[i] == -1)
+            printf("NULL\n");
+        else
+            printf("%d\n", block[next[i]]);
+    }
+    printf("\nFile Blocks in Access Order:\n");
+    current = first;
+    while (current != -1)
+    {
+        printf("%d", block[current]);
+        if (next[current] != -1)
+            printf(" -> ");
+        current = next[current];
+    }
+    printf(" -> NULL\n");
+    return 0;
+}
+
+
+
+INPUT :
+
+Enter the number of blocks in the file: 5
+
+Enter the disk block numbers:
+Block 1: 9
+Block 2: 16
+Block 3: 1
+Block 4: 10
+Block 5: 25
+
+
+OUTPUT :
+
+--- Linked File Allocation ---
+First Block : 9
+Last Block  : 25
+
+Block   Next Block
+9       16
+16      1
+1       10
+10      25
+25      NULL
+
+File Blocks in Access Order:
+9 -> 16 -> 1 -> 10 -> 25 -> NULL
