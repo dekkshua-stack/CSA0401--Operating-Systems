@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+    int request[50];
+    int n, head, diskSize, direction;
+    int i, j, temp;
+    int totalMovement = 0;
+    int current;
+    printf("Enter the disk size: ");
+    scanf("%d", &diskSize);
+    printf("Enter the initial head position: ");
+    scanf("%d", &head);
+    printf("Enter the number of disk requests: ");
+    scanf("%d", &n);
+    printf("Enter the disk request queue:\n");
+    for (i = 0; i < n; i++)
+    {
+        scanf("%d", &request[i]);
+    }
+    printf("\nEnter initial direction:\n");
+    printf("1. Towards higher cylinder numbers\n");
+    printf("2. Towards lower cylinder numbers\n");
+    printf("Enter choice: ");
+    scanf("%d", &direction);
+    for (i = 0; i < n - 1; i++)
+    {
+        for (j = i + 1; j < n; j++)
+        {
+            if (request[i] > request[j])
+            {
+                temp = request[i];
+                request[i] = request[j];
+                request[j] = temp;
+            }
+        }
+    }
+    current = head;
+    printf("\nSeek Sequence:\n");
+    printf("%d", head);
+    if (direction == 1)
+    {
+        for (i = 0; i < n; i++)
+        {
+            if (request[i] >= head)
+            {
+                totalMovement += abs(request[i] - current);
+                current = request[i];
+
+                printf(" -> %d", request[i]);
+            }
+        }
+        if (current != diskSize - 1)
+        {
+            totalMovement += abs((diskSize - 1) - current);
+            current = diskSize - 1;
+            printf(" -> %d", current);
+        }
+        for (i = n - 1; i >= 0; i--)
+        {
+            if (request[i] < head)
+            {
+                totalMovement += abs(request[i] - current);
+                current = request[i];
+                printf(" -> %d", request[i]);
+            }
+        }
+    }
+    else if (direction == 2)
+    {
+        for (i = n - 1; i >= 0; i--)
+        {
+            if (request[i] <= head)
+            {
+                totalMovement += abs(request[i] - current);
+                current = request[i];
+                printf(" -> %d", request[i]);
+            }
+        }
+        if (current != 0)
+        {
+            totalMovement += current;
+            current = 0;
+            printf(" -> %d", current);
+        }
+        for (i = 0; i < n; i++)
+        {
+            if (request[i] > head)
+            {
+                totalMovement += abs(request[i] - current);
+                current = request[i];
+                printf(" -> %d", request[i]);
+            }
+        }
+    }
+    else
+    {
+        printf("\nInvalid direction.\n");
+        return 1;
+    }
+    printf("\n\nTotal Head Movement = %d cylinders\n",
+           totalMovement);
+    printf("Average Head Movement = %.2f cylinders\n",
+           (float)totalMovement / n);
+    return 0;
+}
+
+
+
+INPUT :
+
+Enter the disk size: 200
+Enter the initial head position: 50
+Enter the number of disk requests: 8
+Enter the disk request queue:
+82 170 43 140 24 16 190 60
+
+Enter initial direction:
+1. Towards higher cylinder numbers
+2. Towards lower cylinder numbers
+Enter choice: 1
+
+
+OUTPUT :
+
+Seek Sequence:
+50 -> 60 -> 82 -> 140 -> 170 -> 190 -> 199 -> 43 -> 24 -> 16
+
+Total Head Movement = 332 cylinders
+Average Head Movement = 41.50 cylinders
