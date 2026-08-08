@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+    int request[50];
+    int n, head, diskSize;
+    int i, j, temp;
+    int totalMovement = 0;
+    int current;
+    printf("Enter the disk size: ");
+    scanf("%d", &diskSize);
+    printf("Enter the initial head position: ");
+    scanf("%d", &head);
+    printf("Enter the number of disk requests: ");
+    scanf("%d", &n);
+    printf("Enter the disk request queue:\n");
+    for (i = 0; i < n; i++)
+    {
+        scanf("%d", &request[i]);
+    }
+    for (i = 0; i < n - 1; i++)
+    {
+        for (j = i + 1; j < n; j++)
+        {
+            if (request[i] > request[j])
+            {
+                temp = request[i];
+                request[i] = request[j];
+                request[j] = temp;
+            }
+        }
+    }
+    current = head;
+    printf("\nSeek Sequence:\n");
+    printf("%d", head);
+    for (i = 0; i < n; i++)
+    {
+        if (request[i] >= head)
+        {
+            totalMovement += abs(request[i] - current);
+            current = request[i];
+            printf(" -> %d", request[i]);
+        }
+    }
+    if (current != diskSize - 1)
+    {
+        totalMovement += abs((diskSize - 1) - current);
+        current = diskSize - 1;
+        printf(" -> %d", current);
+    }
+    totalMovement += diskSize - 1;
+    current = 0;
+    printf(" -> %d", current);
+    for (i = 0; i < n; i++)
+    {
+        if (request[i] < head)
+        {
+            totalMovement += abs(request[i] - current);
+            current = request[i];
+            printf(" -> %d", request[i]);
+        }
+    }
+    printf("\n\nTotal Head Movement = %d cylinders\n",
+           totalMovement);
+    printf("Average Head Movement = %.2f cylinders\n",
+           (float)totalMovement / n);
+    return 0;
+}
+
+
+
+INPUT :
+
+Enter the disk size: 200
+Enter the initial head position: 50
+Enter the number of disk requests: 8
+Enter the disk request queue:
+82 170 43 140 24 16 190 60
+
+
+
+OUTPUT :
+
+Seek Sequence:
+50 -> 60 -> 82 -> 140 -> 170 -> 190 -> 199 -> 0 -> 16 -> 24 -> 43
+
+Total Head Movement = 391 cylinders
+Average Head Movement = 48.88 cylinders
