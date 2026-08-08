@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <string.h>
+int main()
+{
+    FILE *fp;
+    char filename[100];
+    char pattern[50];
+    char line[500];
+    int lineNumber = 0;
+    int matchCount = 0;
+    printf("Enter file name: ");
+    scanf("%99s", filename);
+    printf("Enter word to search: ");
+    scanf("%49s", pattern);
+    fp = fopen(filename, "r");
+    if (fp == NULL)
+    {
+        printf("Unable to open file.\n");
+        return 1;
+    }
+    printf("\nMatching lines:\n");
+    while (fgets(line, sizeof(line), fp) != NULL)
+    {
+        lineNumber++;
+        if (strstr(line, pattern) != NULL)
+        {
+            printf("%d: %s", lineNumber, line);
+            matchCount++;
+        }
+    }
+    fclose(fp);
+    if (matchCount == 0)
+    {
+        printf("Pattern not found.\n");
+    }
+    else
+    {
+        printf("\nTotal matching lines: %d\n", matchCount);
+    }
+    return 0;
+}
+
+
+INPUT :
+
+Suppose sample.txt contains:
+
+Operating System
+Process Management
+File Management
+Process Scheduling
+Memory Management
+Enter file name: sample.txt
+Enter word to search: Process
+
+
+OUTPUT :
+
+Matching lines:
+2: Process Management
+4: Process Scheduling
+Total matching lines: 2
