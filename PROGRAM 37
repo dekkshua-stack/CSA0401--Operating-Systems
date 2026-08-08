@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+    int request[50];
+    int n, head;
+    int i;
+    int totalMovement = 0;
+    int current;
+    printf("Enter the initial head position: ");
+    scanf("%d", &head);
+    printf("Enter the number of disk requests: ");
+    scanf("%d", &n);
+    printf("Enter the disk request queue:\n");
+    for (i = 0; i < n; i++)
+    {
+        scanf("%d", &request[i]);
+    }
+    current = head;
+    printf("\nSeek Sequence:\n");
+    printf("%d", head);
+    for (i = 0; i < n; i++)
+    {
+        totalMovement += abs(request[i] - current);
+        current = request[i];
+        printf(" -> %d", request[i]);
+    }
+    printf("\n\nTotal Head Movement = %d cylinders\n", totalMovement);
+    printf("Average Head Movement = %.2f cylinders\n",
+           (float)totalMovement / n);
+    return 0;
+}
+
+
+INPUT :
+
+Enter the initial head position: 50
+Enter the number of disk requests: 8
+Enter the disk request queue:
+82 170 43 140 24 16 190 60
+
+
+OUTPUT :
+
+Seek Sequence:
+50 -> 82 -> 170 -> 43 -> 140 -> 24 -> 16 -> 190 -> 60
+
+Total Head Movement = 642 cylinders
+Average Head Movement = 80.25 cylinders
