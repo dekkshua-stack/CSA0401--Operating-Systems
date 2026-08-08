@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <sys/stat.h>
+int main()
+{
+    struct stat file;
+    char filename[100];
+    printf("Enter file name: ");
+    scanf("%99s", filename);
+    if (stat(filename, &file) != 0)
+    {
+        perror("stat");
+        return 1;
+    }
+    printf("\n--- Linux File Access Permissions ---\n");
+    printf("File: %s\n", filename);
+    printf("\nUser Types:\n");
+    printf("u - Owner/User\n");
+    printf("g - Group\n");
+    printf("o - Others\n");
+    printf("\nPermissions:\n");
+    printf("Owner : ");
+    printf("%c", (file.st_mode & S_IRUSR) ? 'r' : '-');
+    printf("%c", (file.st_mode & S_IWUSR) ? 'w' : '-');
+    printf("%c", (file.st_mode & S_IXUSR) ? 'x' : '-');
+    printf("\nGroup : ");
+    printf("%c", (file.st_mode & S_IRGRP) ? 'r' : '-');
+    printf("%c", (file.st_mode & S_IWGRP) ? 'w' : '-');
+    printf("%c", (file.st_mode & S_IXGRP) ? 'x' : '-');
+    printf("\nOthers: ");
+    printf("%c", (file.st_mode & S_IROTH) ? 'r' : '-');
+    printf("%c", (file.st_mode & S_IWOTH) ? 'w' : '-');
+    printf("%c", (file.st_mode & S_IXOTH) ? 'x' : '-');
+    printf("\n\nPermission Meaning:\n");
+    printf("r = Read\n");
+    printf("w = Write\n");
+    printf("x = Execute\n");
+    printf("- = Permission not granted\n");
+    return 0;
+}
+
+
+INPUT :
+
+Enter file name: sample.txt
+
+
+OUTPUT :
+
+--- Linux File Access Permissions ---
+File: sample.txt
+
+User Types:
+u - Owner/User
+g - Group
+o - Others
+
+Permissions:
+Owner : rwx
+Group : r-x
+Others: r--
+
+Permission Meaning:
+r = Read
+w = Write
+x = Execute
+- = Permission not granted
