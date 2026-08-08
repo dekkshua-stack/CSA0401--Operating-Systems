@@ -1,0 +1,68 @@
+#include <stdio.h>
+int main()
+{
+    int indexBlock[50];
+    int n, i, access;
+    printf("Enter the number of blocks in the file: ");
+    scanf("%d", &n);
+    if (n <= 0 || n > 50)
+    {
+        printf("Invalid number of blocks.\n");
+        return 1;
+    }
+    printf("Enter the block numbers allocated to the file:\n");
+    for (i = 0; i < n; i++)
+    {
+        printf("Block %d: ", i + 1);
+        scanf("%d", &indexBlock[i]);
+    }
+    printf("\n--- Indexed File Allocation ---\n");
+    printf("Index Block\n");
+    for (i = 0; i < n; i++)
+    {
+        printf("Entry %d -> Block %d\n", i + 1, indexBlock[i]);
+    }
+    printf("\nEnter the block position to access (1-%d): ", n);
+    scanf("%d", &access);
+    if (access < 1 || access > n)
+    {
+        printf("Invalid block position.\n");
+    }
+    else
+    {
+        printf("\nLogical Block %d\n", access);
+        printf("Index Entry   : %d\n", access);
+        printf("Physical Block : %d\n", indexBlock[access - 1]);
+        printf("Block accessed successfully.\n");
+    }
+    return 0;
+}
+
+
+
+INPUT :
+
+Enter the number of blocks in the file: 5
+Enter the block numbers allocated to the file:
+Block 1: 9
+Block 2: 16
+Block 3: 1
+Block 4: 10
+Block 5: 25
+Enter the block position to access (1-5): 3
+
+
+OUTPUT :
+
+--- Indexed File Allocation ---
+Index Block
+Entry 1 -> Block 9
+Entry 2 -> Block 16
+Entry 3 -> Block 1
+Entry 4 -> Block 10
+Entry 5 -> Block 25
+
+Logical Block 3
+Index Entry   : 3
+Physical Block : 1
+Block accessed successfully.
