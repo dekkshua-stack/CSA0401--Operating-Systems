@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <string.h>
+int main()
+{
+    int fd;
+    int flags;
+    char data[] = "UNIX System Calls";
+    char buffer[100];
+    struct stat fileInfo;
+    DIR *dir;
+    struct dirent *entry;
+    off_t position;
+    int n;
+    fd = open("osfile.txt", O_CREAT | O_RDWR | O_TRUNC, 0644);
+    if (fd == -1)
+    {
+        perror("open");
+        return 1;
+    }
+    printf("File opened successfully.\n");
+    flags = fcntl(fd, F_GETFL);
+    if (flags == -1)
+    {
+        perror("fcntl");
+        close(fd);
+        return 1;
+    }
+    printf("File descriptor: %d\n", fd);
+    printf("fcntl(): File status flags obtained successfully.\n");
+    write(fd, data, strlen(data));
+    position = lseek(fd, 0, SEEK_SET);
+    if (position == -1)
+    {
+        perror("lseek");
+        close(fd);
+        return 1;
+    }
+    printf("lseek(): File pointer moved to position %ld.\n",
+           (long)position);
+    n = read(fd, buffer, sizeof(buffer) - 1);
+    if (n == -1)
+    {
+        perror("read");
+        close(fd);
+        return 1;
+    }
+    buffer[n] = '\0';
+    printf("Data read: %s\n", buffer);
+    if (stat("osfile.txt", &fileInfo) == -1)
+    {
+        perror("stat");
+        close(fd);
+        return 1;
+    }
+    printf("\nFile Information:\n");
+    printf("File Size: %ld bytes\n", (long)fileInfo.st_size);
+    printf("File Inode: %ld\n", (long)fileInfo.st_ino);
+    printf("Number of Links: %ld\n", (long)fileInfo.st_nlink);
+    close(fd);
+    dir = opendir(".");
+    if (dir == NULL)
+    {
+        perror("opendir");
+        return 1;
+    }
+    printf("\nFiles in Current Directory:\n");
+    while ((entry = readdir(dir)) != NULL)
+    {
+        printf("%s\n", entry->d_name);
+    }
+    closedir(dir);
+    return 0;
+}
+
+OUTPUT :
+
+File opened successfully.
+File descriptor: 3
+fcntl(): File status flags obtained successfully.
+lseek(): File pointer moved to position 0.
+Data read: UNIX System Calls
+
+File Information:
+File Size: 17 bytes
+File Inode: 123456
+Number of Links: 1
+
+Files in Current Directory:
+.
+..
+osfile.txt
