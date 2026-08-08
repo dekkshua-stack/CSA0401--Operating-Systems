@@ -1,0 +1,89 @@
+#include <stdio.h>
+struct Employee
+{
+    int id;
+    char name[50];
+    float salary;
+};
+int main()
+{
+    FILE *fp;
+    struct Employee emp;
+    int n, i, searchId;
+    long position;
+    fp = tmpfile();
+    if (fp == NULL)
+    {
+        printf("Unable to create temporary file.\n");
+        return 1;
+    }
+    printf("Enter number of employees: ");
+    scanf("%d", &n);
+    for (i = 0; i < n; i++)
+    {
+        printf("\nEnter details of Employee %d\n", i + 1);
+        printf("Employee ID: ");
+        scanf("%d", &emp.id);
+        printf("Employee Name: ");
+        scanf("%49s", emp.name);
+        printf("Salary: ");
+        scanf("%f", &emp.salary);
+        fwrite(&emp, sizeof(struct Employee), 1, fp);
+    }
+    printf("\nEnter Employee ID to access: ");
+    scanf("%d", &searchId);
+    position = (long)(searchId - 1) * sizeof(struct Employee);
+    if (fseek(fp, position, SEEK_SET) != 0)
+    {
+        printf("Error while accessing the record.\n");
+        fclose(fp);
+        return 1;
+    }
+    if (fread(&emp, sizeof(struct Employee), 1, fp) == 1)
+    {
+        if (emp.id == searchId)
+        {
+            printf("\n--- Employee Details ---\n");
+            printf("Employee ID : %d\n", emp.id);
+            printf("Name        : %s\n", emp.name);
+            printf("Salary      : %.2f\n", emp.salary);
+        }
+        else
+        {
+            printf("Employee ID not found.\n");
+        }
+    }
+    else
+    {
+        printf("Employee ID not found.\n");
+    }
+    fclose(fp);
+    return 0;
+}
+
+
+INPUT :
+
+Enter number of employees: 3
+Enter details of Employee 1
+Employee ID: 1
+Employee Name: Arun
+Salary: 25000
+Enter details of Employee 2
+Employee ID: 2
+Employee Name: Ravi
+Salary: 30000
+Enter details of Employee 3
+Employee ID: 3
+Employee Name: Priya
+Salary: 35000
+Enter Employee ID to access: 2
+
+
+
+OUTPUT :
+
+--- Employee Details ---
+Employee ID : 2
+Name        : Ravi
+Salary      : 30000.00
